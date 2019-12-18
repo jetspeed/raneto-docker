@@ -6,7 +6,7 @@ var path = require('path');
 var config = {
 
   // Your site title (format: page_title - site_title)
-  site_title: 'Sample Raneto Docs',
+  site_title: '知道',
 
   // The base URL of your site (can use %base_url% in Markdown files)
   base_url: '',
@@ -88,7 +88,7 @@ var config = {
   locale: 'en',
 
   // Support search with extra languages
-  searchExtraLanguages: ['ru'],
+  searchExtraLanguages: ['zh'],
 
   // Sets the format for datetime's
   datetime_format: 'Do MMM YYYY',

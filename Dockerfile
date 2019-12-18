@@ -6,19 +6,12 @@ FROM node:slim
 MAINTAINER Madhu Akula <madhu@appsecco.com>
 
 # Change the raneto version based on version you want to use
-ENV RANETO_VERSION 0.16.0
-ENV RANETO_INSTALL_DIR /opt/raneto
+ENV RANETO_INSTALL_DIR /opt/Raneto
 
 # Get Raneto from sources
-RUN cd /tmp \
-    && curl -SLO "https://github.com/gilbitron/Raneto/archive/$RANETO_VERSION.tar.gz" \
-    && mkdir -p $RANETO_INSTALL_DIR \
-    && tar -xzf "$RANETO_VERSION.tar.gz" -C $RANETO_INSTALL_DIR --strip-components=1 \
-    && rm "$RANETO_VERSION.tar.gz"
-
-
-# Installing dependencies
-RUN npm install --global gulp-cli pm2
+RUN apt-get update  && apt-get install git python g++ make -y \
+    && cd /opt && git clone https://github.com/jetspeed/Raneto \
+    && npm install --global gulp-cli pm2
 
 # Entering into the Raneto directory
 WORKDIR $RANETO_INSTALL_DIR
@@ -26,10 +19,12 @@ WORKDIR $RANETO_INSTALL_DIR
 # Installing Raneto
 RUN npm install \
     && rm -f $RANETO_INSTALL_DIR/example/config.default.js \
-    && gulp
+    && rm -rf $RANETO_INSTALL_DIR/node_modules/lunr 
+COPY lunr $RANETO_INSTALL_DIR/node_modules/lunr 
+RUN  gulp &&rm -rf /var/cache/apt/* 
 
 # Exposed the raneto default port 3000
 EXPOSE 3000
 
 # Starting the raneto
-CMD [ "pm2", "start", "/opt/raneto/example/server.js", "--name", "raneto", "--no-daemon" ]
+CMD [ "pm2", "start", "/opt/Raneto/example/server.js", "--name", "raneto", "--no-daemon" ]
